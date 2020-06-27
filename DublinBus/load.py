@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.db import connection
 import json
 
-def f():
+def load():
     cursor = connection.cursor()
     sql=""" CREATE TABLE IF NOT EXISTS stops (
        
@@ -34,5 +34,6 @@ def f():
         value = (route_id, stop_name, stop_lat, stop_lon)
         sql="insert into stops values ('%s','%s','%s','%s');"
         cursor.execute(sql % value)
-f()
+        i+=1
+load()
     
