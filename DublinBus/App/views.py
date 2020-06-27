@@ -5,6 +5,7 @@ import json
 
 def load():
     
+    
     cursor = connection.cursor()
     sql=""" CREATE TABLE IF NOT EXISTS stops (
        
