@@ -5,6 +5,8 @@ import json
 
 def load():
     cursor = connection.cursor()
+    cursor.execute("DROP TABLE IF EXISTS stops")
+    
     sql=""" CREATE TABLE IF NOT EXISTS stops (
        
         stop_id VARCHAR(256), 
@@ -32,7 +34,7 @@ def load():
         stop_lon = tmp[i]['stop_lon']
         
         value = (route_id, stop_name, stop_lat, stop_lon)
-        sql="insert into stops values ('%s','%s','%s','%s');"
+        sql='insert into stops values ("%s","%s","%s","%s");'
         cursor.execute(sql % value)
         i+=1
 load()
