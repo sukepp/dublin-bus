@@ -32,6 +32,7 @@ def f():
         stop_lon = tmp[i]['stop_lon']
         
         value = (route_id, stop_name, stop_lat, stop_lon)
-        cursor.execute("insert into stops values(value)")
+        sql="insert into stops values ('%s','%s','%s','%s');"
+        cursor.execute(sql % value)
 f()
     
