@@ -13,12 +13,13 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type=text/javascript src="../../static/App/js/app.js"></script>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 
 <!-- Body -->
-<body>
+<body onload="init_stops_and_routes()">
     <!-- Logo -->
     <div class="container-fluid">
         <div class="row">
@@ -51,7 +52,7 @@
                         <h2 style="font-size:20px">Time:</h2>
                         <input type="time" id="predict-time" name="predict-time" value="13:30" min="05:00" max="23:00" required style="font-size:20px">
                         <br><br>
-                        <button style="font-size:20px">Search</button>
+                        <button style="font-size:20px" onclick="search_by_route()">Search</button>
                     </div>
                     <!-- Tab for search-by-stop -->
                     <div class="tab-pane" id="search_by_stop">
@@ -64,14 +65,13 @@
         </div>
     </div>
     <!-- Line to the JS -->
-    <script type=text/javascript src="../../static/App/js/app.js"></script>
     <!-- Link to the google map -->
     <!-- Load the API from the specified URL
     * The async attribute allows the browser to render the page while the API loads
     * The key parameter will contain your own API key (which is not needed for this tutorial)
-    * The callback parameter executes the initMap() function
+    * The callback parameter executes the init_map() function
     -->
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdlLCjk9Oyl2sflPmTk6OjJA0n7e9E7ac&callback=initMap">
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdlLCjk9Oyl2sflPmTk6OjJA0n7e9E7ac&callback=init_map">
     </script>
 </body>
 
