@@ -20,5 +20,7 @@ from App import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),
+    path('get_stops/',views.get_stops),
+    path('get_route_stop_relation',views.get_route_stop_relation),
     path('hello/', views.hello)
 ]
