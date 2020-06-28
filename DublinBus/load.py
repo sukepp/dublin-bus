@@ -66,9 +66,9 @@ def load_route():
     i=0
     while i < num:
         direction_id = tmp[i]['stop_id']
-        route_id = tmp[i]['stop_name']
-        stop_sequence = tmp[i]['stop_lat']
-        stop_id = tmp[i]['stop_lon']
+        route_id = tmp[i]['route_id']
+        stop_sequence = tmp[i]['stop_sequence']
+        stop_id = tmp[i]['stop_id']
         
         value = (direction_id, route_id, stop_sequence, stop_id)
         sql='insert into route_relation values ("%s","%s","%s","%s");'
