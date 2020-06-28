@@ -66,8 +66,8 @@ def get_route_stop_relation(request):
     return HttpResponse(json.dumps(routes))
 
 
-#def predict_time(request, route_id, origin_stop, destination_stop_id, date, time):
- #   pass
+def predict_time(request, route_id, origin_stop, destination_stop_id, date, time):
+    pass
     
     
     
