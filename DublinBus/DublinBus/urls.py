@@ -22,6 +22,6 @@ urlpatterns = [
     path('', views.index),
     path('get_stops/',views.get_stops),
     path('get_route_stop_relation',views.get_route_stop_relation),
-    path('predict_time/<route_id>/<origin_stop>/<destination_stop_id>/<date>/<time>'),
+    path('predict_time/<route_id>/<origin_stop>/<destination_stop_id>/<date>/<time>', views.predict_time),
     path('hello/', views.hello)
 ]
