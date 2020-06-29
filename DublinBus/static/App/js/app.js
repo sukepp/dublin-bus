@@ -77,7 +77,6 @@ function init_stops() {
                 // Set the stops drop-down by stop_name_list
                 stop_name_list.forEach(function (stop_name) {
                     options_stops += "<option value=\"" + stop_name + "\">" + stop_name + "</option>";
-                    //console.log(options_stops);
                 });
                 document.getElementById("origin-stop-dropdown").innerHTML = options_stops;
                 document.getElementById("destination-stop-dropdown").innerHTML = options_stops;
@@ -103,7 +102,6 @@ function init_routes() {
              var route_name_list = new Array();
              var options_routes = "";
              for (var route in data) {
-                 console.log(route);
                  var directions = new Array();
                  for (var direction in data[route]) {
                     var stop_list = new Array();
@@ -141,14 +139,11 @@ function check_validity(route_name, origin_stop_id, destination_stop_id) {
     var index_destination_stop;
     var index_direction;
     var valid = false;
-    //console.log("param", origin_stop_id, destination_stop_id);
     for (var d = 0; d < route_map.get(route_name).length; d++) {
         index_origin_stop = -1;
         index_destination_stop = -1;
         direction = d;
-        //console.log("direction");
         for (var e = 0; e < route_map.get(route_name)[d].length; e++) {
-            //console.log(route_map.get(route_name)[d][e]);
             if (origin_stop_id == route_map.get(route_name)[d][e]) {
                 index_origin_stop = e;
             }
@@ -185,13 +180,11 @@ function search_by_route() {
     var destination_stop_id_list = stop_name_map.get(destination_stop_name);
 
     var info_validity;
-    //console.log("origin: ", origin_stop_id_list, ", dest: ", destination_stop_id_list);
     for (var i = 0; i < origin_stop_id_list.length; i++) {
         for (var j = 0; j < destination_stop_id_list.length; j++) {
-            //console.log("origin: ", origin_stop_id_list[i], ", dest: ", destination_stop_id_list[j]);
             info_validity = check_validity(route_name, origin_stop_id_list[i].stop_id, destination_stop_id_list[j].stop_id);
             if (info_validity.is_valid == true) {
-                console.log("info_valid");
+                console.log("Search by route: valid input.");
                 break;
             }
         }
