@@ -136,16 +136,19 @@ function init_routes() {
         })
 }
 
-function check_validity(route, origin_stop_id, destination_stop_id) {
+function check_validity(route_name, origin_stop_id, destination_stop_id) {
     var index_origin_stop;
     var index_destination_stop;
     var index_direction;
     var valid = false;
+    //console.log("param", origin_stop_id, destination_stop_id);
     for (var d = 0; d < route_map.get(route_name).length; d++) {
         index_origin_stop = -1;
         index_destination_stop = -1;
         direction = d;
+        //console.log("direction");
         for (var e = 0; e < route_map.get(route_name)[d].length; e++) {
+            //console.log(route_map.get(route_name)[d][e]);
             if (origin_stop_id == route_map.get(route_name)[d][e]) {
                 index_origin_stop = e;
             }
@@ -167,18 +170,28 @@ function check_validity(route, origin_stop_id, destination_stop_id) {
     }
 }
 
+function show_route() {
+}
+
+function predict_time() {
+
+}
+
 function search_by_route() {
     var route_name = document.getElementById("route-dropdown").value;
     var origin_stop_name = document.getElementById("origin-stop-dropdown").value;
     var destination_stop_name = document.getElementById("destination-stop-dropdown").value;
-    var origin_stop_id_list = stop_name_map[origin_stop_name];
-    var destination_stop_id_list = stop_name_map[destination_stop_name];
+    var origin_stop_id_list = stop_name_map.get(origin_stop_name);
+    var destination_stop_id_list = stop_name_map.get(destination_stop_name);
 
     var info_validity;
+    //console.log("origin: ", origin_stop_id_list, ", dest: ", destination_stop_id_list);
     for (var i = 0; i < origin_stop_id_list.length; i++) {
         for (var j = 0; j < destination_stop_id_list.length; j++) {
-            info_validity = check_validity(route_name, origin_stop_id_list[i], destination_stop_id_list[j]);
+            //console.log("origin: ", origin_stop_id_list[i], ", dest: ", destination_stop_id_list[j]);
+            info_validity = check_validity(route_name, origin_stop_id_list[i].stop_id, destination_stop_id_list[j].stop_id);
             if (info_validity.is_valid == true) {
+                console.log("info_valid");
                 break;
             }
         }
@@ -188,8 +201,9 @@ function search_by_route() {
     }
 
     if (info_validity.is_valid == true) {
-        console.log("Search by route valid");
+        show_route();
+        predict_time();
     } else {
-        console.log("Search by route invalid");
+        alert("Invalid Input");
     }
 }
