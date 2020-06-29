@@ -12,18 +12,22 @@ const chart_colors = ['#59b75c', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6'];
 const backgroundColor = '#fff';
 // Init setup the google map
 function init_map() {
-    // The location of dublin
+    // Set the location of dublin
     var dublin = {
         lat: 53.35,
         lng: -6.26
     };
-    // The map, centered at dublin
+    // Create the map centered at dublin
     map = new google.maps.Map(
         document.getElementById('map_location'), {
             zoom: 13,
             center: dublin,
             mapTypeId: 'roadmap'
         });
+
+    // Display the public transit network of a city on the map
+    var transitLayer = new google.maps.TransitLayer();
+    transitLayer.setMap(map);
 }
 
 // Load the Visualization API and the corechart package.
@@ -31,7 +35,7 @@ google.charts.load('current', {
     'packages': ['corechart']
 });
 
-// The definition of Stop class
+// Set the definition of Stop class
 function Stop(stop_id, stop_name, pos_latitude, pos_longitude)
 {
     this.stop_id = stop_id;
@@ -54,7 +58,7 @@ function init_stops() {
                 var stops = data.stops;
                 var stop_name_list = new Array();
                 stops.forEach(function (stop) {
-                    var stop_node = new Stop(stop.stop_id, stop.stop_name, stop.pos_latitude, stop.pos_longitude);
+                    var stop_node = new Stop(stop.stop_id, stop.stop_name, stop.stop_lat, stop.stop_lon);
                     // Set the stop_id_map
                     stop_id_map.set(stop.stop_id, stop_node);
                     // Set the stop_name_map
@@ -135,14 +139,14 @@ function init_routes() {
 }
 
 function check_validity(route_name, origin_stop_id, destination_stop_id) {
-    var index_origin_stop;
-    var index_destination_stop;
-    var index_direction;
+    var index_origin_stop = -1;
+    var index_destination_stop = -1;
+    var index_direction = -1;
     var valid = false;
     for (var d = 0; d < route_map.get(route_name).length; d++) {
         index_origin_stop = -1;
         index_destination_stop = -1;
-        direction = d;
+        index_direction = d;
         for (var e = 0; e < route_map.get(route_name)[d].length; e++) {
             if (origin_stop_id == route_map.get(route_name)[d][e]) {
                 index_origin_stop = e;
@@ -159,13 +163,44 @@ function check_validity(route_name, origin_stop_id, destination_stop_id) {
 
     return {
         is_valid: valid,
-        direction: index_direction,
-        origin_stop: index_origin_stop,
-        destination_stop: index_destination_stop
+        route_name: route_name,
+        index_direction: index_direction,
+        index_origin_stop: index_origin_stop,
+        index_destination_stop: index_destination_stop
     }
 }
 
-function show_route() {
+var prevDirectionsDisplay = null;
+
+function show_route(route_name, index_direction, index_origin_stop, index_destination_stop) {
+    var origin_stop = stop_id_map.get(route_map.get(route_name)[index_direction][index_origin_stop]);
+    var destination_stop = stop_id_map.get(route_map.get(route_name)[index_direction][index_destination_stop]);
+
+    if (prevDirectionsDisplay != null) {
+        prevDirectionsDisplay.setMap(null);
+    }
+
+    directionsDisplay = new google.maps.DirectionsRenderer;
+    directionsService = new google.maps.DirectionsService;
+
+    directionsDisplay.setMap(map);
+
+    directionsService.route({
+        origin: new google.maps.LatLng(origin_stop.pos_latitude, origin_stop.pos_longitude),
+        destination: new google.maps.LatLng(destination_stop.pos_latitude, destination_stop.pos_longitude),
+        travelMode: google.maps.TravelMode['TRANSIT'],
+        transitOptions: {
+            modes: ['BUS']
+        },
+        provideRouteAlternatives: true
+    }, function(response, status) {
+        if (status == 'OK') {
+            directionsDisplay.setDirections(response);
+            prevDirectionsDisplay = directionsDisplay;
+        } else {
+            window.alert('Error:' + status);
+        }
+    });
 }
 
 function predict_time() {
@@ -194,9 +229,9 @@ function search_by_route() {
     }
 
     if (info_validity.is_valid == true) {
-        show_route();
+        show_route(info_validity.route_name, info_validity.index_direction, info_validity.index_origin_stop, info_validity.index_destination_stop);
         predict_time();
     } else {
-        alert("Invalid Input");
+        alert("Sorry, your origin stop or destination stop does not belong to the route. Please input again.");
     }
 }
