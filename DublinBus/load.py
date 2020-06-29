@@ -65,7 +65,7 @@ def load_route():
     
     i=0
     while i < num:
-        direction_id = tmp[i]['stop_id']
+        direction_id = tmp[i]['direction_id']
         route_id = tmp[i]['route_id']
         stop_sequence = tmp[i]['stop_sequence']
         stop_id = tmp[i]['stop_id']
@@ -79,6 +79,5 @@ def load_route():
     
     
     
-#load_stops()
+load_stops()
 load_route()
-    
