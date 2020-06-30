@@ -81,13 +81,16 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'DublinBus',
+        #'NAME':'mydb',
         'USER': 'root',
+        #'USER': 'bus',
+        
 
         # Account for vm server
         'PASSWORD': 'WEaregroup14!',
 
         # Account for Jiaqi Guo
-        #'PASSWORD': 'WEaregroup14!',
+        #'PASSWORD': 'abc963215',
 
         # Account for Peisong Han
         #'PASSWORD': 'hanpeisong',
