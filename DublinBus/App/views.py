@@ -29,7 +29,6 @@ def get_stops(request):
     row_headers=[x[0] for x in cursor.description]
     rows= cursor.fetchall()
     cursor.close
-    print(rows)
     
     stop_data=[]
     json_stops={'stops': stop_data}
