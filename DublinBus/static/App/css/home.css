@@ -24,6 +24,34 @@ html, body {
     font-size: 14px;
 }
 
+p {
+    padding: 15px;
+}
+
+.row {
+    display: flex;
+    height: 30px;
+}
+
+div .item {
+    width: 20%;
+    /*border: 1px solid black;*/
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /*background-color: antiquewhite;*/
+    padding: 4px;
+}
+
+div .title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /*background-color:burlywood;*/
+    font-weight: 400;
+}
+
 #footer {
     color: black;
     font-size: 15px;

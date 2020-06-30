@@ -22,7 +22,7 @@
 <body onload="init_stops_and_routes()">
     <!-- Logo -->
     <div class="container-fluid">
-        <div class="row">
+        <div>
             <h1 id="header_word">Dublin Bus Journey Time Prediction System</h1>
         </div>
     </div>
@@ -53,6 +53,7 @@
                         <input type="time" id="predict-time" name="predict-time" value="13:30" min="05:00" max="23:00" required style="font-size:20px">
                         <br><br>
                         <button style="font-size:20px" onclick="search_by_route()">Search</button>
+                        <p id="search-by-route-content"></p>
                     </div>
                     <!-- Tab for search-by-stop -->
                     <div class="tab-pane" id="search_by_stop">
@@ -75,13 +76,13 @@
     </script>
 </body>
 
-<!-- Footer -->
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-12 col-md-12 col-sm-12" id="footer">
-            <p>Copyright 2020 Jiaqi Guo, Siang-Teng Jiang, Yingjie Niu, Peisong Han. All Rights Reserved.</p>
-        </div>
-    </div>
-</div>
+<!-- Footer-->
+<!--<div class="container-fluid">-->
+<!--    <div>-->
+<!--        <div class="col-lg-12 col-md-12 col-sm-12" id="footer">-->
+<!--            <p>Copyright 2020 Jiaqi Guo, Siang-Teng Jiang, Yingjie Niu, Peisong Han. All Rights Reserved.</p>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 
 </html>

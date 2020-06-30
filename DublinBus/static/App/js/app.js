@@ -203,8 +203,33 @@ function show_route(route_name, index_direction, index_origin_stop, index_destin
     });
 }
 
-function predict_time() {
+function predict_time(route_name, index_direction, index_origin_stop, index_destination_stop) {
+    var origin_stop = stop_id_map.get(route_map.get(route_name)[index_direction][index_origin_stop]);
+    var destination_stop = stop_id_map.get(route_map.get(route_name)[index_direction][index_destination_stop]);
 
+    var date = document.getElementById("predict-date").value;
+    var time = document.getElementById("predict-time").value;
+
+    $.getJSON(ROOT + "/predict_time/" + route_name + "/" + index_origin_stop + "/" + origin_stop.stop_id + '/' + index_destination_stop + "/" + destination_stop.stop_id
+        + "/" + date + "/" + time, null, function (data) {
+        var prediction_time = data.prediction_time + " min";
+        var process = origin_stop.stop_name + " -> " + destination_stop.stop_name;
+        document.getElementById("search-by-route-content").innerHTML = "";
+        var content = "<div class='row'><div class='item title'>Option</div><div class='item title'>Route</div><div class='item title'>Process</div><div class='item title'>Predicted Time</div><div class='item title'>Map</div></div>";
+        content += "<div class='row'><div class='item'>" + 1 + "</div><div class='item'>" + route_name + "</div><div class='item'><p>" + process + "</p></div><div class='item'>" + prediction_time + "</div>";
+        content += "<div class='item'><a href='javascript:void(0)'>" + "Show Route" + "</a></div>";
+        content += "</div>"
+        document.getElementById("search-by-route-content").innerHTML = content;
+    })
+    .done(function () {
+        console.log("Predict Time Success");
+    })
+    .fail(function () {
+        console.log("Predict Time Error");
+    })
+    .always(function () {
+        console.log("Predict Time Complete");
+    })
 }
 
 function search_by_route() {
@@ -230,7 +255,7 @@ function search_by_route() {
 
     if (info_validity.is_valid == true) {
         show_route(info_validity.route_name, info_validity.index_direction, info_validity.index_origin_stop, info_validity.index_destination_stop);
-        predict_time();
+        predict_time(info_validity.route_name, info_validity.index_direction, info_validity.index_origin_stop, info_validity.index_destination_stop);
     } else {
         alert("Sorry, your origin stop or destination stop does not belong to the route. Please input again.");
     }
