@@ -4,7 +4,8 @@ from django.db import connection
 import json
 import time as _time
 import requests
-from sklearn.externals import joblib
+import joblib
+#from sklearn.externals import joblib
 
 
 # Create your views here.

@@ -46,8 +46,8 @@ function Stop(stop_id, stop_name, pos_latitude, pos_longitude)
 
 // Initialize static data including stops and route information
 function init_stops_and_routes() {
-    init_stops();
     init_routes();
+    init_stops();
 }
 
 // Initialize stops data
@@ -56,7 +56,7 @@ function init_stops() {
             if ('stops' in data) {
                 var options_stops = "";
                 var stops = data.stops;
-                var stop_name_list = new Array();
+                var stop_name_list_for_all = new Array();
                 stops.forEach(function (stop) {
                     var stop_node = new Stop(stop.stop_id, stop.stop_name, stop.stop_lat, stop.stop_lon);
                     // Set the stop_id_map
@@ -67,19 +67,28 @@ function init_stops() {
                         stop_list.push(stop_node);
                         stop_name_map.set(stop.stop_name, stop_list);
                         // Insert the stop_name_list
-                        stop_name_list.push(stop.stop_name);
+                        stop_name_list_for_all.push(stop.stop_name);
                     } else {
                         var stop_list = stop_name_map.get(stop.stop_name);
                         stop_list.push(stop_node);
                         stop_name_map.set(stop.stop_name, stop_list);
                     }
                 });
+                var stop_name_list_for_route = new Array();
+                var route_name = document.getElementById("route-dropdown").value;
+                for (var d = 0; d < route_map.get(route_name).length; d++) {
+                    for (var e = 0; e < route_map.get(route_name)[d].length; e++) {
+                        var stop_id = route_map.get(route_name)[d][e];
+                        stop_name_list_for_route.push(stop_id_map.get(stop_id).stop_name);
+                    }
+                }
+                stop_name_list_for_route = Array.from(new Set(stop_name_list_for_route));
                 // Sort the stop_name_list
-                stop_name_list.sort(function(a, b){
+                stop_name_list_for_route.sort(function(a, b){
                     return a.localeCompare(b);
                 });
                 // Set the stops drop-down by stop_name_list
-                stop_name_list.forEach(function (stop_name) {
+                stop_name_list_for_route.forEach(function (stop_name) {
                     options_stops += "<option value=\"" + stop_name + "\">" + stop_name + "</option>";
                 });
                 document.getElementById("origin-stop-dropdown").innerHTML = options_stops;
@@ -136,6 +145,29 @@ function init_routes() {
         .always(function () {
             console.log("Get Routes Complete");
         })
+}
+
+function select_route() {
+    var options_stops = "";
+    var stop_name_list_for_route = new Array();
+    var route_name = document.getElementById("route-dropdown").value;
+    for (var d = 0; d < route_map.get(route_name).length; d++) {
+        for (var e = 0; e < route_map.get(route_name)[d].length; e++) {
+            var stop_id = route_map.get(route_name)[d][e];
+            stop_name_list_for_route.push(stop_id_map.get(stop_id).stop_name);
+        }
+    }
+    stop_name_list_for_route = Array.from(new Set(stop_name_list_for_route));
+    // Sort the stop_name_list
+    stop_name_list_for_route.sort(function(a, b){
+        return a.localeCompare(b);
+    });
+    // Set the stops drop-down by stop_name_list
+    stop_name_list_for_route.forEach(function (stop_name) {
+        options_stops += "<option value=\"" + stop_name + "\">" + stop_name + "</option>";
+    });
+    document.getElementById("origin-stop-dropdown").innerHTML = options_stops;
+    document.getElementById("destination-stop-dropdown").innerHTML = options_stops;
 }
 
 function check_validity(route_name, origin_stop_id, destination_stop_id) {
@@ -244,7 +276,7 @@ function search_by_route() {
         for (var j = 0; j < destination_stop_id_list.length; j++) {
             info_validity = check_validity(route_name, origin_stop_id_list[i].stop_id, destination_stop_id_list[j].stop_id);
             if (info_validity.is_valid == true) {
-                console.log("Search by route: valid input.");
+                //console.log("Search by route: valid input.");
                 break;
             }
         }
