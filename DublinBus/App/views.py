@@ -71,7 +71,6 @@ def get_route_stop_relation(request):
 
 def predict_time(request, route_id, origin_stop_sequence, origin_stop_id, destination_stop_sequence, destination_stop_id, date, time):
     
-    url='http://api.openweathermap.org/data/2.5/forecast?q=Dublin,ie&units=metric&appid=62d8e38e8a3f439885a38dcff6e8e86d'
     
     date_time = date +' ' + time
     #struct_time entered
@@ -84,10 +83,11 @@ def predict_time(request, route_id, origin_stop_sequence, origin_stop_id, destin
     #time stamp entered
     timestamp=_time.mktime(struct_date_time)
 
-    
-    text_page=requests.get(url).text
+    f = open('./forecast.json')
+    text_page=f.read()
+    f.close()
     tmp = json.loads(text_page)['list']
-        
+    
     num = len(tmp)
     i=0
     
