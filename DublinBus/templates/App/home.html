@@ -19,7 +19,7 @@
 </head>
 
 <!-- Body -->
-<body onload="init_stops_and_routes()">
+<body onload="init_routes()">
     <!-- Logo -->
     <div class="container-fluid">
         <div>
@@ -43,8 +43,10 @@
                     <div class="tab-pane active " id="search_by_route">
                         <h2 style="font-size:20px">Route:</h2>
                         <select id="route-dropdown" name="route-dropdown" onclick="select_route()"></select>
+                        <h2 style="font-size:20px">Direction:</h2>
+                        <select id="direction-dropdown" name="direction-dropdown" onclick="select_direction()"></select>
                         <h2 style="font-size:20px">Origin Stop:</h2>
-                        <select id="origin-stop-dropdown" name="origin-stop-dropdown"></select>
+                        <select id="origin-stop-dropdown" name="origin-stop-dropdown" onclick="select_origin_stop()"></select>
                         <h2 style="font-size:20px">Destination Stop:</h2>
                         <select id="destination-stop-dropdown" name="destination-stop-dropdown"></select>
                         <h2 style="font-size:20px">Date:</h2>
