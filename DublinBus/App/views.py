@@ -58,6 +58,7 @@ def get_route_stop_relation(request):
         if row[1] != r_temp:
             r_temp=row[1]
             routes[r_temp] = {}
+            d_temp=-1 #  Initialize direction
             
         if row[0] != d_temp:
             d_temp=row[0]
