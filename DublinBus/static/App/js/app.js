@@ -44,6 +44,32 @@ function Stop(stop_id, stop_name, pos_latitude, pos_longitude)
     this.pos_longitude = pos_longitude;
 }
 
+function init() {
+    init_date_and_time();
+    init_routes();
+}
+
+function init_date() {
+    var time = new Date();
+    var day = ("0" + time.getDate()).slice(-2);
+    var month = ("0" + (time.getMonth() + 1)).slice(-2);
+    var today = time.getFullYear() + "-" + (month) + "-" + (day);
+    document.getElementById("predict-date").value = today;
+}
+
+function init_time() {
+    var date = new Date();
+    var hour = date.getHours();
+    var minute = date.getMinutes();
+    var time = hour + ":" + minute;
+    document.getElementById("predict-time").value = time;
+}
+
+function init_date_and_time() {
+    init_date();
+    init_time();
+}
+
 // Initialize routes data
 function init_routes() {
     $.getJSON(ROOT + "/get_route_stop_relation", null, function (data) {
@@ -267,6 +293,9 @@ function predict_time(route_name, index_direction, index_origin_stop, index_dest
 }
 
 function search_by_route() {
+    var content = "<div class='title'>Please wait for the prediction result.</div>"
+    document.getElementById("search-by-route-content").innerHTML = content;
+
     var route_name = document.getElementById("route-dropdown").value;
     var index_direction = document.getElementById("direction-dropdown").value;
     var index_origin_stop = document.getElementById("origin-stop-dropdown").value;
