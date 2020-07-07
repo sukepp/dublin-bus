@@ -20,7 +20,7 @@ function init_map() {
     // Create the map centered at dublin
     map = new google.maps.Map(
         document.getElementById('map_location'), {
-            zoom: 13,
+            zoom: 11,
             center: dublin,
             mapTypeId: 'roadmap'
         });
@@ -42,6 +42,32 @@ function Stop(stop_id, stop_name, pos_latitude, pos_longitude)
     this.stop_name = stop_name;
     this.pos_latitude = pos_latitude;
     this.pos_longitude = pos_longitude;
+}
+
+function init() {
+    init_date_and_time();
+    init_routes();
+}
+
+function init_date() {
+    var time = new Date();
+    var day = ("0" + time.getDate()).slice(-2);
+    var month = ("0" + (time.getMonth() + 1)).slice(-2);
+    var today = time.getFullYear() + "-" + (month) + "-" + (day);
+    document.getElementById("predict-date").value = today;
+}
+
+function init_time() {
+    var date = new Date();
+    var hour = ("0" + date.getHours()).slice(-2);
+    var minute = ("0" + date.getMinutes()).slice(-2);
+    var time = hour + ":" + minute;
+    document.getElementById("predict-time").value = time;
+}
+
+function init_date_and_time() {
+    init_date();
+    init_time();
 }
 
 // Initialize routes data
@@ -204,37 +230,27 @@ function select_route() {
     select_direction();
 }
 
-var prevDirectionsDisplay = null;
+var markerList = [];
 
 function show_route(route_name, index_direction, index_origin_stop, index_destination_stop) {
-    var origin_stop = stop_id_map.get(route_map.get(route_name)[index_direction][index_origin_stop]);
-    var destination_stop = stop_id_map.get(route_map.get(route_name)[index_direction][index_destination_stop]);
-
-    if (prevDirectionsDisplay != null) {
-        prevDirectionsDisplay.setMap(null);
+    for (var i = 0; i < markerList.length; i++) {
+        markerList[i].setMap(null);
     }
+    markerList = []
 
-    directionsDisplay = new google.maps.DirectionsRenderer;
-    directionsService = new google.maps.DirectionsService;
-
-    directionsDisplay.setMap(map);
-
-    directionsService.route({
-        origin: new google.maps.LatLng(origin_stop.pos_latitude, origin_stop.pos_longitude),
-        destination: new google.maps.LatLng(destination_stop.pos_latitude, destination_stop.pos_longitude),
-        travelMode: google.maps.TravelMode['TRANSIT'],
-        transitOptions: {
-            modes: ['BUS']
-        },
-        provideRouteAlternatives: true
-    }, function(response, status) {
-        if (status == 'OK') {
-            directionsDisplay.setDirections(response);
-            prevDirectionsDisplay = directionsDisplay;
-        } else {
-            window.alert('Error:' + status);
-        }
-    });
+    for (var index = index_origin_stop; index <= index_destination_stop; index++) {
+        var stop = stop_id_map.get(route_map.get(route_name)[index_direction][index]);
+        marker = new google.maps.Marker({
+            position: {
+                lat: Number(stop.pos_latitude),
+                lng: Number(stop.pos_longitude)
+            },
+            map: map,
+            title: stop.stop_name + ": " + stop.stop_id,
+            stop_id: stop.stop_id
+        });
+        markerList.push(marker);
+    }
 }
 
 function predict_time(route_name, index_direction, index_origin_stop, index_destination_stop) {
@@ -267,6 +283,9 @@ function predict_time(route_name, index_direction, index_origin_stop, index_dest
 }
 
 function search_by_route() {
+    var content = "<div class='title'>Please wait for the prediction result.</div>"
+    document.getElementById("search-by-route-content").innerHTML = content;
+
     var route_name = document.getElementById("route-dropdown").value;
     var index_direction = document.getElementById("direction-dropdown").value;
     var index_origin_stop = document.getElementById("origin-stop-dropdown").value;
