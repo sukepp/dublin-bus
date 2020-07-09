@@ -1,11 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.db import connection
+from django.http.response import JsonResponse
+from .models import Stop, Route
 import json
 import time as _time
 import requests
 import joblib
 import sys
+
+
 #from sklearn.externals import joblib
 
 
@@ -14,61 +17,34 @@ import sys
 def index(request):
     return render(request, "App/home.html");
 
-def hello(request):
-    
-    cursor = connection.cursor()
-    cursor.execute('SELECT * FROM stops')
-    
-    rows= cursor.fetchall()
-    
-    return HttpResponse(rows)
 
 def get_stops(request):
     
-    cursor = connection.cursor()
-    cursor.execute('SELECT * FROM stops')
+    result={}
+    stops=list(Stop.objects.values())
+    result["stops"]=stops
+
+    return JsonResponse(result)    
     
-    row_headers=[x[0] for x in cursor.description]
-    rows= cursor.fetchall()
-    cursor.close
-    
-    stop_data=[]
-    json_stops={'stops': stop_data}
-    
-    for row in rows:
-        stop_data.append(dict(zip(row_headers,row)))
-    
-    
-    return HttpResponse(json.dumps(json_stops))
 
 def get_route_stop_relation(request):
     
-    cursor = connection.cursor()
-    cursor.execute('SELECT * FROM route_relation')
-    
-    #row_headers=[x[0] for x in cursor.description]
-    #print(row_headers)
-    rows=cursor.fetchall()
-
-    r_temp=''  #route temp
-    d_temp=-1  #direction temp
-    routes={}
-    
-    for row in rows:
+    routes=sum(list(Route.objects.values_list("route_id").distinct()), ())
+    result={}
+    for route in routes:
+        result[route]={}
+        direction_0=list(Route.objects.filter(route_id=route,direction_id='0').values("stop_id"))
+        direction_1 =list(Route.objects.filter(route_id=route,direction_id='1').values("stop_id"))
         
-        if row[1] != r_temp:
-            r_temp=row[1]
-            routes[r_temp] = {}
-            d_temp=-1 #  Initialize direction
-            
-        if row[0] != d_temp:
-            d_temp=row[0]
-            stops=[]
-            routes[r_temp][d_temp]= stops
+        if direction_0:
+            result[route]['0']=direction_0
+        if direction_1:
+            result[route]['1']=direction_1
+    
+    return JsonResponse(result)    
+   
 
-        stops.append({'stop_id':row[3]})
-         
-    return HttpResponse(json.dumps(routes))
+    
 
 
 def predict_time(request, route_id, origin_stop_sequence, origin_stop_id, destination_stop_sequence, destination_stop_id, date, time):
@@ -143,6 +119,14 @@ def predict_time(request, route_id, origin_stop_sequence, origin_stop_id, destin
     
     print(sys.getrefcount(joblib.load('./models/Model_%s.joblib' % route_id)))
     return HttpResponse(json.dumps({"prediction_time":prediction_time}))
+
+def test(request):
+    result={}
+    stops=list(Stop.objects.values())
+    result["stops"]=stops
+
+    return JsonResponse(result)
+
 
 
     
