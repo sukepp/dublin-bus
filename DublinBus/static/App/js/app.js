@@ -233,6 +233,8 @@ function select_route() {
 var markerList = [];
 
 function show_route(route_name, index_direction, index_origin_stop, index_destination_stop) {
+    map.setZoom(11);
+
     for (var i = 0; i < markerList.length; i++) {
         markerList[i].setMap(null);
     }
