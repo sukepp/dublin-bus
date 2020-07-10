@@ -35,8 +35,7 @@
                 <!-- Tab selection-->
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#search_by_route" data-toggle="tab" id="tab_content">Search by Route</a></li>
-                    <li><a href="#saerch_by_stop" data-toggle="tab" id="tab_content">Search by Stop</a></li>
-                    <li><a href="#saerch_by_address" data-toggle="tab" id="tab_content">Search by Address</a></li>
+                    <li><a href="#search_by_address" data-toggle="tab" id="tab_content">Search by Address</a></li>
                 </ul>
                 <div class="tab-content">
                     <!-- Tab for search-by-route -->
@@ -57,11 +56,19 @@
                         <button style="font-size:20px" onclick="search_by_route()">Search</button>
                         <p id="search-by-route-content"></p>
                     </div>
-                    <!-- Tab for search-by-stop -->
-                    <div class="tab-pane" id="search_by_stop">
-                    </div>
                     <!-- Tab for search-by-address -->
                     <div class="tab-pane" id="search_by_address">
+                        <h2 style="font-size:20px">Origin Address:</h2>
+                        <input type="text" id="origin-address" name="origin-address" value="University College Dublin"></input>
+                        <h2 style="font-size:20px">Destination Address:</h2>
+                        <input type="text" id="destination-address" name="destination-address" value="Dundrum"></input>
+                        <h2 style="font-size:20px">Date:</h2>
+                        <input type="date" id="predict-date-google" name="predict-date-google" value="2020-06-23" style="font-size:20px">
+                        <h2 style="font-size:20px">Time:</h2>
+                        <input type="time" id="predict-time-google" name="predict-time-google" value="13:30" min="05:00" max="23:00" required style="font-size:20px">
+                        <br><br>
+                        <button style="font-size:20px" onclick="search_by_address()">Search</button>
+                        <p id="search-by-address-content"></p>
                     </div>
                 </div>
             </div>

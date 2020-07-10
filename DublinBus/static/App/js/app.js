@@ -1,7 +1,11 @@
 // Set the root location of server
 ROOT = window.location.origin;
 
+var directions;
+var renderer;
+
 var map;
+var geocoder;
 var stop_id_map = new Map();
 var stop_name_map = new Map();
 var route_map = new Map();
@@ -28,6 +32,12 @@ function init_map() {
     // Display the public transit network of a city on the map
     var transitLayer = new google.maps.TransitLayer();
     transitLayer.setMap(map);
+
+    // Initialize the address parser
+    geocoder = new google.maps.Geocoder();
+
+    directions = new google.maps.DirectionsService();  // Get the route requirement
+    renderer = new google.maps.DirectionsRenderer();   // Show the route
 }
 
 // Load the Visualization API and the corechart package.
@@ -55,6 +65,7 @@ function init_date() {
     var month = ("0" + (time.getMonth() + 1)).slice(-2);
     var today = time.getFullYear() + "-" + (month) + "-" + (day);
     document.getElementById("predict-date").value = today;
+    document.getElementById("predict-date-google").value = today;
 }
 
 function init_time() {
@@ -63,6 +74,7 @@ function init_time() {
     var minute = ("0" + date.getMinutes()).slice(-2);
     var time = hour + ":" + minute;
     document.getElementById("predict-time").value = time;
+    document.getElementById("predict-time-google").value = time;
 }
 
 function init_date_and_time() {
@@ -232,13 +244,20 @@ function select_route() {
 
 var markerList = [];
 
-function show_route(route_name, index_direction, index_origin_stop, index_destination_stop) {
-    map.setZoom(11);
-
+function clear_route() {
     for (var i = 0; i < markerList.length; i++) {
         markerList[i].setMap(null);
     }
     markerList = []
+
+    if (renderer != null) {
+        renderer.setMap(null);
+    }
+}
+
+function show_route(route_name, index_direction, index_origin_stop, index_destination_stop) {
+    map.setZoom(11);
+    clear_route();
 
     for (var index = index_origin_stop; index <= index_destination_stop; index++) {
         var stop = stop_id_map.get(route_map.get(route_name)[index_direction][index]);
@@ -248,7 +267,7 @@ function show_route(route_name, index_direction, index_origin_stop, index_destin
                 lng: Number(stop.pos_longitude)
             },
             map: map,
-            title: stop.stop_name + ": " + stop.stop_id,
+            title: stop.stop_name + ", Stop ID: " + stop.stop_id,
             stop_id: stop.stop_id
         });
         markerList.push(marker);
@@ -300,3 +319,138 @@ function search_by_route() {
         alert("Sorry, the input is invalid. Please input again.");
     }
 }
+
+// Search by address
+var name_origin_address;
+var name_destination_address;
+var coord_origin_address;
+var coord_destination_address;
+
+function search_by_address() {
+    name_origin_address = get_origin_address();
+    name_destination_address = get_destination_address();
+
+    coord_origin_address = null;
+    coord_destination_address = null;
+
+    clear_route();
+    get_coordinate();
+    pre_draw_route();
+}
+
+function get_origin_address() {
+  var from = document.getElementById('origin-address').value;
+  //codeAddress(from);
+  return from;
+}
+
+function get_destination_address() {
+  var to = document.getElementById('destination-address').value;
+  //codeAddress(to);
+  return to;
+}
+
+function codeAddress(allAddress) {
+    if (geocoder) {
+        geocoder.geocode({
+            'address': allAddress
+        },
+        function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                var beachMarker = new google.maps.Marker({
+                    map: map
+                });
+                map.setCenter(results[0].geometry.location);
+                map.setZoom(15);
+                beachMarker.setPosition(results[0].geometry.location);
+                attachSecretMessage(beachMarker, results[0].geometry.location, results[0].formatted_address);
+            } else {
+                //alert("Failed to load map, status code: " + status);
+            }
+        });
+    }
+}
+
+function attachSecretMessage(marker, piont, address) {
+    var message = "<b>Coordinate: </b>" + piont.lat() + ", " + piont.lng() + "<br/><br/>" + "<b> Address: </b>" + address;
+    var infowindow = new google.maps.InfoWindow({
+        content: message,
+        size: new google.maps.Size(50, 60)
+    });
+    infowindow.open(map, marker);
+    if (typeof (mapClick) == "function") {
+        mapClick(piont.lng(), piont.lat(), address);
+    }
+}
+
+function get_coordinate() {
+    if (isNaN(name_origin_address)) {
+        var fn = function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                if (results[0]) {
+                    coord_origin_address = results[0].geometry.location;
+                }
+            } else {
+                coord_origin_address = name_origin_address;
+                alert("Geocoder failed due to: " + status);
+            }
+        }
+        getGeocoder(name_origin_address, fn);
+    }
+
+    if (isNaN(name_destination_address)) {
+        var fn = function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                if (results[0]) {
+                    coord_destination_address = results[0].geometry.location;
+                }
+            } else {
+                coord_destination_address = name_destination_address;
+                alert("Geocoder failed due to: " + status);
+            }
+        }
+        getGeocoder(name_destination_address, fn);
+     }
+}
+
+function getGeocoder(allAddress, fn) {
+    if (geocoder) {
+        geocoder.geocode({
+            'address': allAddress
+        }, fn);
+    }
+}
+
+function pre_draw_route() {
+    if (!coord_origin_address || !coord_destination_address) {
+        setTimeout(pre_draw_route, 10);
+        return;
+    }
+    draw_route();
+}
+
+function draw_route() {
+    var request = {
+        origin: new google.maps.LatLng(coord_origin_address.lat(), coord_origin_address.lng()),
+        destination: new google.maps.LatLng(coord_destination_address.lat(), coord_destination_address.lng()),
+        travelMode: google.maps.TravelMode['TRANSIT'],
+        transitOptions: {
+            modes: ['BUS']
+        },
+        provideRouteAlternatives: true,
+    };
+    var panel = document.getElementById('search-by-address-content');
+    panel.innerHTML = '';
+    directions.route(request, function (response, status) {
+        if (status == google.maps.DirectionsStatus.OK) {
+            renderer.setDirections(response);
+            renderer.setMap(map);
+            renderer.setPanel(panel);
+        } else {
+            renderer.setMap(null);
+            renderer.setPanel(null);
+            panel.innerHTML = "No Results.";
+        }
+    });
+}
+
