@@ -7,6 +7,7 @@ import time as _time
 import requests
 import joblib
 import sys
+import traceback
 
 
 #from sklearn.externals import joblib
@@ -107,17 +108,21 @@ def predict_time(request, route_id, origin_stop_sequence, origin_stop_id, destin
     destination_features = [destination_stop_id, wday, destination_stop_sequence,order, temp, feels_like, pressure, humidity, wind_speed, wind_deg, coulds_all, weather_id,weather_main]
     
     #print("destination_features:",destination_features)
-    rfc = joblib.load('./models/Model_%s.joblib' % route_id)
     
-    pre_origin = rfc.predict([origin_features])[0]
-    pre_destination = rfc.predict([destination_features])[0]
+    try:
+        rfc = joblib.load('./models/Model_%s.joblib' % route_id)
+        
+        pre_origin = rfc.predict([origin_features])[0]
+        pre_destination = rfc.predict([destination_features])[0]
+        
+        
+        prediction_time = abs(int((pre_destination - pre_origin)/60))
+        
+        del rfc
     
+    except:
+        print (traceback.format_exc())    
     
-    prediction_time = abs(int((pre_destination - pre_origin)/60))
-    
-    del rfc
-    
-    print(sys.getrefcount(joblib.load('./models/Model_%s.joblib' % route_id)))
     return HttpResponse(json.dumps({"prediction_time":prediction_time}))
 
 def test(request):
