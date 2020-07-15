@@ -59,9 +59,9 @@
                     <!-- Tab for search-by-address -->
                     <div class="tab-pane" id="search_by_address">
                         <h2 style="font-size:20px">Origin Address:</h2>
-                        <input type="text" id="origin-address" name="origin-address" value="University College Dublin" style="font-size:20px"></input>
+                        <input type="text" id="origin-address" name="origin-address" style="font-size:20px"></input>
                         <h2 style="font-size:20px">Destination Address:</h2>
-                        <input type="text" id="destination-address" name="destination-address" value="Dundrum" style="font-size:20px"></input>
+                        <input type="text" id="destination-address" name="destination-address" style="font-size:20px"></input>
                         <h2 style="font-size:20px">Date:</h2>
                         <input type="date" id="predict-date-google" name="predict-date-google" value="2020-06-23" style="font-size:20px">
                         <h2 style="font-size:20px">Time:</h2>
@@ -81,8 +81,9 @@
     * The key parameter will contain your own API key (which is not needed for this tutorial)
     * The callback parameter executes the init_map() function
     -->
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdlLCjk9Oyl2sflPmTk6OjJA0n7e9E7ac&callback=init_map">
-    </script>
+<!--    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdlLCjk9Oyl2sflPmTk6OjJA0n7e9E7ac&callback=init_map"></script>-->
+<!--    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>-->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdlLCjk9Oyl2sflPmTk6OjJA0n7e9E7ac&callback=init_map&v=3.exp&sensor=false&libraries=places"></script>
 </body>
 
 <!-- Footer-->

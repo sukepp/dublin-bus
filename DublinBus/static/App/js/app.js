@@ -38,6 +38,8 @@ function init_map() {
 
     directions = new google.maps.DirectionsService();  // Get the route requirement
     renderer = new google.maps.DirectionsRenderer();   // Show the route
+
+    init_address();
 }
 
 // Load the Visualization API and the corechart package.
@@ -226,6 +228,25 @@ function init_destination_stop_dropdown() {
         options_stops += "<option value=\"none\">" + "none" + "</option>";
     }
     document.getElementById("destination-stop-dropdown").innerHTML = options_stops;
+}
+
+var origin_address_box;
+var destination_address_box;
+
+function init_address() {
+    var from = document.getElementById('origin-address');
+    var to = document.getElementById('destination-address');
+
+    var irelandBounds = new google.maps.LatLngBounds(
+        new google.maps.LatLng(50.999929,-10.854492),
+        new google.maps.LatLng(55.354135,-5.339355));
+
+    origin_address_box = new google.maps.places.SearchBox(from, {
+        bounds: irelandBounds
+    });
+    destination_address_box = new google.maps.places.SearchBox(to, {
+        bounds: irelandBounds
+    });
 }
 
 function select_origin_stop() {
