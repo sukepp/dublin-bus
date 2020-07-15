@@ -8,6 +8,8 @@ import requests
 import joblib
 import sys
 import traceback
+import xgboost
+import pandas as pd
 
 
 #from sklearn.externals import joblib
@@ -55,8 +57,10 @@ def predict_time(request, route_id, origin_stop_sequence, origin_stop_id, destin
     #struct_time entered
     struct_date_time= _time.strptime(date_time, '%Y-%m-%d %H:%M') 
     
-    wday = _time.strftime('%w',struct_date_time)
+    wday = int(_time.strftime('%w',struct_date_time))
     second = struct_date_time.tm_hour*3600 + struct_date_time.tm_min*60
+    
+   
     
     
     #time stamp entered
@@ -104,16 +108,16 @@ def predict_time(request, route_id, origin_stop_sequence, origin_stop_id, destin
     order=int(rfc.predict([order_features])[0])
     #print("order:", order)
     
-    origin_features = [origin_stop_id, wday, origin_stop_sequence, order, temp, feels_like, pressure, humidity, wind_speed, wind_deg, coulds_all, weather_id, weather_main]
-    destination_features = [destination_stop_id, wday, destination_stop_sequence,order, temp, feels_like, pressure, humidity, wind_speed, wind_deg, coulds_all, weather_id,weather_main]
-    
+    origin_features = pd.DataFrame([[int(origin_stop_id), wday, int(origin_stop_sequence), order, temp, feels_like, pressure, humidity, wind_speed, wind_deg, coulds_all, weather_id, weather_main]])
+    destination_features =  pd.DataFrame([[int(destination_stop_id), wday, int(destination_stop_sequence),order, temp, feels_like, pressure, humidity, wind_speed, wind_deg, coulds_all, weather_id,weather_main]])
+    destination_features.columns=origin_features.columns=['STOPPOINTID','DAYOFWEEK','PROGRNUMBER','ORDER','temp','feels_like','pressure','humidity','wind_speed','wind_deg','clouds_all','weather_id','weather_main']
     #print("destination_features:",destination_features)
     
     try:
         rfc = joblib.load('./models/Model_%s.joblib' % route_id)
         
-        pre_origin = rfc.predict([origin_features])[0]
-        pre_destination = rfc.predict([destination_features])[0]
+        pre_origin = rfc.predict(origin_features)[0]
+        pre_destination = rfc.predict(destination_features)[0]
         
         
         prediction_time = abs(int((pre_destination - pre_origin)/60))
