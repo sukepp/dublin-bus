@@ -305,12 +305,8 @@ function predict_time(route_name, index_direction, index_origin_stop, index_dest
     $.getJSON(ROOT + "/predict_time/" + route_name + "/" + index_origin_stop + "/" + origin_stop.stop_id + '/' + index_destination_stop + "/" + destination_stop.stop_id
         + "/" + date + "/" + time, null, function (data) {
         var prediction_time = data.prediction_time + " min";
-        var process = origin_stop.stop_name + " -> " + destination_stop.stop_name;
         document.getElementById("search-by-route-content").innerHTML = "";
-        var content = "<div class='row'><div class='item title'>Option</div><div class='item title'>Route</div><div class='item title'>Process</div><div class='item title'>Predicted Time</div><div class='item title'>Map</div></div>";
-        content += "<div class='row'><div class='item'>" + 1 + "</div><div class='item'>" + route_name + "</div><div class='item'><p>" + process + "</p></div><div class='item'>" + prediction_time + "</div>";
-        content += "<div class='item'><a href='javascript:void(0)'>" + "Show Route" + "</a></div>";
-        content += "</div>"
+        var content = "<div style=\"font-size:20px\">Predicted Time: " + predict_time + "</div>";
         document.getElementById("search-by-route-content").innerHTML = content;
     })
     .done(function () {
