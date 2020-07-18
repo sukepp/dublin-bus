@@ -466,7 +466,7 @@ function draw_route() {
         } else {
             renderer.setMap(null);
             renderer.setPanel(null);
-            panel.innerHTML = "No Results.";
+            panel.innerHTML = "<div style=\"font-size:20px\">Sorry. No Results.</div>";
         }
     });
 }
