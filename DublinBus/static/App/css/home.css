@@ -57,3 +57,37 @@ div .title {
     font-size: 15px;
     text-align: center;
 }
+
+.header img {
+    height: 110px;
+    width: 110px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.nav {
+    overflow: hidden;
+    font-family: Arial;
+    border-bottom: 1px solid gray;
+    border-top: 1px solid gray;
+}
+
+.main-nav {
+    padding-left: 30%;
+    margin-bottom: 40px;
+}
+
+/*
+ Links inside the navbar
+ Reference link: https://www.w3schools.com/howto/howto_css_dropdown_navbar.asp
+*/
+.nav a {
+    float: left;
+    font-size: 16px;
+    color: black;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
