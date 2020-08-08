@@ -306,7 +306,7 @@ function predict_time(route_name, index_direction, index_origin_stop, index_dest
         + "/" + date + "/" + time, null, function (data) {
         var prediction_time = data.prediction_time + " min";
         document.getElementById("search-by-route-content").innerHTML = "";
-        var content = "<div style=\"font-size:20px\">Predicted Time: " + predict_time + "</div>";
+        var content = "<div style=\"font-size:20px\">Predicted Time: " + prediction_time + "</div>";
         document.getElementById("search-by-route-content").innerHTML = content;
     })
     .done(function () {

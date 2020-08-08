@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Head -->
+<head>
+    <title>Dublin Bus</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel=stylesheet type="text/css" href="../../static/App/css/home.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type=text/javascript src="../../static/App/js/timetable.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+
+<!-- Body -->
+<body onload="init()">
+    <!-- Logo -->
+    <div class="container-fluid">
+        <header class="header">
+            <div>
+                <h1 id="header_word">Dublin Bus Journey Time Prediction System</h1>
+            </div>
+            <div class="nav main-nav">
+                <a href="./">Routing</a>
+                <a href="timetable">Timetable</a>
+                <a href="dublin_airport">Dublin Airport</a>
+            </div>
+        </header>
+    </div>
+
+    <!-- The div element for the map and information window -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-8 col-md-8 col-sm-12" id="map_location"></div>
+            <div class="col-lg-4 col-md-4 col-sm-12" id="info_content">
+                <!-- Tab selection-->
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#search_by_route" data-toggle="tab" id="tab_content">Search by Route</a></li>
+                    <li><a href="#search_by_stop" data-toggle="tab" id="tab_content">Search by Stop</a></li>
+                </ul>
+                <div class="tab-content">
+                    <!-- Tab for search-by-route -->
+                    <div class="tab-pane active " id="search_by_route">
+                        <h2 style="font-size:20px">Route:</h2>
+                        <select id="route-dropdown" name="route-dropdown" onclick="select_route()" style="font-size:20px"></select>
+                        <h2 style="font-size:16px">Direction:</h2>
+                        <select id="direction-dropdown" name="direction-dropdown" onclick="select_direction()" style="font-size:20px"></select>
+                        <br><br>
+                        <button style="font-size:20px" onclick="search_by_route()">Search</button>
+                        <p id="search-by-route-content"></p>
+                    </div>
+                    <!-- Tab for search-by-stop -->
+                    <div class="tab-pane" id="search_by_stop">
+                        <h2 style="font-size:20px">Stop ID:</h2>
+                        <select id="stop-dropdown" name="stop-dropdown" style="font-size:20px"></select>
+                        <br><br>
+                        <button style="font-size:20px" onclick="search_by_stop()">Search</button>
+                        <p id="search-by-stop-content"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Line to the JS -->
+    <!-- Link to the google map -->
+    <!-- Load the API from the specified URL
+    * The async attribute allows the browser to render the page while the API loads
+    * The key parameter will contain your own API key (which is not needed for this tutorial)
+    * The callback parameter executes the init_map() function
+    -->
+<!--    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdlLCjk9Oyl2sflPmTk6OjJA0n7e9E7ac&callback=init_map"></script>-->
+<!--    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>-->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdlLCjk9Oyl2sflPmTk6OjJA0n7e9E7ac&callback=init_map&v=3.exp&sensor=false&libraries=places"></script>
+</body>
+
+<!-- Footer-->
+<!--<div class="container-fluid">-->
+<!--    <div>-->
+<!--        <div class="col-lg-12 col-md-12 col-sm-12" id="footer">-->
+<!--            <p>Copyright 2020 Jiaqi Guo, Siang-Teng Jiang, Yingjie Niu, Peisong Han. All Rights Reserved.</p>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+</html>
