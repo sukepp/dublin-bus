@@ -140,14 +140,19 @@ function init_route_dropdown() {
         route_name_list.push(key);
     }
 
-    // Sort the route_name_list
-    route_name_list.sort(function(a, b){
-        return a.localeCompare(b);
-    });
-    // Set the Routes drop-down by route_name_list
-    route_name_list.forEach(function (route_name) {
-        options_routes += "<option value=\"" + route_name + "\">" + route_name + "</option>";
-    });
+    if (route_name_list.length != 0) {
+        // Sort the route_name_list
+        route_name_list.sort(function(a, b){
+            return a.localeCompare(b);
+        });
+        // Set the Routes drop-down by route_name_list
+        route_name_list.forEach(function (route_name) {
+            options_routes += "<option value=\"" + route_name + "\">" + route_name + "</option>";
+        });
+    } else {
+        options_directions += "<option value=\"none\">none</option>";
+    }
+
     document.getElementById("route-dropdown").innerHTML = options_routes;
 }
 
@@ -155,14 +160,19 @@ function init_direction_dropdown() {
     var options_directions = "";
     var direction_list = new Array();
     var route_name = document.getElementById("route-dropdown").value;
-    for (var d = 0; d < route_map.get(route_name).length; d++) {
-        direction_list.push(d);
-    }
-    // Set the direction drop-down by direction_list
-    if (route_map.get(route_name).length != 0) {
-        direction_list.forEach(function (direction) {
-            options_directions += "<option value=\"" + direction + "\">" + direction + "</option>";
-        });
+
+    if (route_name != "none") {
+        for (var d = 0; d < route_map.get(route_name).length; d++) {
+            direction_list.push(d);
+        }
+        // Set the direction drop-down by direction_list
+        if (route_map.get(route_name).length != 0) {
+            direction_list.forEach(function (direction) {
+                options_directions += "<option value=\"" + direction + "\">" + direction + "</option>";
+            });
+        } else {
+            options_directions += "<option value=\"none\">none</option>";
+        }
     } else {
         options_directions += "<option value=\"none\">none</option>";
     }
@@ -179,14 +189,18 @@ function init_stop_dropdown() {
         stop_id_list.push(key);
     }
 
-    // Sort the route_name_list
-    stop_id_list.sort(function(a, b){
-        return a.localeCompare(b);
-    });
-    // Set the stops drop-down by stop_id_list
-    stop_id_list.forEach(function (stop_id) {
-        options_stops += "<option value=\"" + stop_id + "\">" + stop_id + "</option>";
-    });
+    if (stop_id_list.length != 0) {
+        // Sort the route_name_list
+        stop_id_list.sort(function(a, b){
+            return a.localeCompare(b);
+        });
+        // Set the stops drop-down by stop_id_list
+        stop_id_list.forEach(function (stop_id) {
+            options_stops += "<option value=\"" + stop_id + "\">" + stop_id + "</option>";
+        });
+    } else {
+        options_stops += "<option value=\"none\">none</option>";
+    }
     document.getElementById("stop-dropdown").innerHTML = options_stops;
 }
 
@@ -230,7 +244,7 @@ function show_route_list(route_name, index_direction, index_origin_stop, index_d
     var content = "<ul>";
     for (var index = index_origin_stop; index <= index_destination_stop; index++) {
         var stop = stop_id_map.get(route_map.get(route_name)[index_direction][index]);
-        content += "<li>" + stop.stop_name + "</li><br>";
+        content += "<li style=\"font-size:20px\">" + stop.stop_name + "</li><br>";
     }
     content += "</ul>"
     document.getElementById("search-by-route-content").innerHTML = content;
@@ -241,7 +255,7 @@ function search_by_route() {
     var route_name = document.getElementById("route-dropdown").value;
     var index_direction = document.getElementById("direction-dropdown").value;
 
-    if (index_destination_stop != "none") {
+    if (route_name != "none" && index_direction != "none") {
         var index_origin_stop = 0;
         var index_destination_stop = route_map.get(route_name)[index_direction].length - 1;
         show_route_map(route_name, index_direction, index_origin_stop, index_destination_stop);
@@ -253,19 +267,24 @@ function search_by_route() {
 
 // Search by Stop
 function search_by_stop() {
+    clear_route();
     var stop_id = document.getElementById("stop-dropdown").value;
 
-    var content = "<ul>";
+    if (stop_id != "none") {
+        var content = "<ul>";
 
-    for (var [key, value] of route_map) {
-        for (var index_direction = 0; index_direction < route_map.get(key).length; index_direction++) {
-            for (var index_stop = 0; index_stop < route_map.get(key)[index_direction].length; index_stop++) {
-                if (stop_id == route_map.get(key)[index_direction][index_stop]) {
-                    content += "<li>" + "Route: " + key + "</li><br>";
+        for (var [key, value] of route_map) {
+            for (var index_direction = 0; index_direction < route_map.get(key).length; index_direction++) {
+                for (var index_stop = 0; index_stop < route_map.get(key)[index_direction].length; index_stop++) {
+                    if (stop_id == route_map.get(key)[index_direction][index_stop]) {
+                        content += "<li style=\"font-size:20px\">" + "Route: " + key + "</li><br>";
+                    }
                 }
             }
         }
+        content += "</ul>"
+        document.getElementById("search-by-stop-content").innerHTML = content;
+    } else {
+        alert("Sorry, the input is invalid. Please input again.");
     }
-    content += "</ul>"
-    document.getElementById("search-by-stop-content").innerHTML = content;
 }

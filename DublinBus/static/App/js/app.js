@@ -165,14 +165,18 @@ function init_route_dropdown() {
         route_name_list.push(key);
     }
 
-    // Sort the route_name_list
-    route_name_list.sort(function(a, b){
-        return a.localeCompare(b);
-    });
-    // Set the Routes drop-down by route_name_list
-    route_name_list.forEach(function (route_name) {
-        options_routes += "<option value=\"" + route_name + "\">" + route_name + "</option>";
-    });
+    if (route_name_list.length != 0) {
+        // Sort the route_name_list
+        route_name_list.sort(function(a, b){
+            return a.localeCompare(b);
+        });
+        // Set the Routes drop-down by route_name_list
+        route_name_list.forEach(function (route_name) {
+            options_routes += "<option value=\"" + route_name + "\">" + route_name + "</option>";
+        });
+    } else {
+        options_directions += "<option value=\"none\">none</option>";
+    }
     document.getElementById("route-dropdown").innerHTML = options_routes;
 }
 
@@ -180,14 +184,19 @@ function init_direction_dropdown() {
     var options_directions = "";
     var direction_list = new Array();
     var route_name = document.getElementById("route-dropdown").value;
-    for (var d = 0; d < route_map.get(route_name).length; d++) {
-        direction_list.push(d);
-    }
-    // Set the direction drop-down by direction_list
-    if (route_map.get(route_name).length != 0) {
-        direction_list.forEach(function (direction) {
-            options_directions += "<option value=\"" + direction + "\">" + direction + "</option>";
-        });
+
+    if (route_map.has(route_name)) {
+        for (var d = 0; d < route_map.get(route_name).length; d++) {
+            direction_list.push(d);
+        }
+        // Set the direction drop-down by direction_list
+        if (route_map.get(route_name).length != 0) {
+            direction_list.forEach(function (direction) {
+                options_directions += "<option value=\"" + direction + "\">" + direction + "</option>";
+            });
+        } else {
+            options_directions += "<option value=\"none\">none</option>";
+        }
     } else {
         options_directions += "<option value=\"none\">none</option>";
     }
@@ -199,7 +208,7 @@ function init_origin_stop_dropdown() {
     var stop_name_list = new Array();
     var route_name = document.getElementById("route-dropdown").value;
     var index_direction = document.getElementById("direction-dropdown").value;
-    if (index_direction != "none" && route_map.get(route_name)[index_direction].length > 1) {
+    if (route_name != "none" && index_direction != "none" && route_map.get(route_name)[index_direction].length > 1) {
         // Set the stops drop-down by stop_name_list
         for (var e = 0; e < route_map.get(route_name)[index_direction].length - 1; e++) {
             var stop_id = route_map.get(route_name)[index_direction][e];
@@ -218,7 +227,7 @@ function init_destination_stop_dropdown() {
     var route_name = document.getElementById("route-dropdown").value;
     var index_direction = document.getElementById("direction-dropdown").value;
     var index_origin_stop = document.getElementById("origin-stop-dropdown").value;
-    if (index_origin_stop != "none") {
+    if (route_name != "none" && index_direction != "none" && index_origin_stop != "none") {
         for (var e = Number(index_origin_stop) + 1; e < route_map.get(route_name)[index_direction].length; e++) {
             var stop_id = route_map.get(route_name)[index_direction][e];
             var stop_name = stop_id_map.get(stop_id).stop_name;
@@ -321,7 +330,7 @@ function predict_time(route_name, index_direction, index_origin_stop, index_dest
 }
 
 function search_by_route() {
-    var content = "<div class='title'>Please wait for the prediction result.</div>"
+    var content = "<div class='title' style=\"font-size:20px\">Please wait for the prediction result.</div>"
     document.getElementById("search-by-route-content").innerHTML = content;
 
     var route_name = document.getElementById("route-dropdown").value;
@@ -329,7 +338,7 @@ function search_by_route() {
     var index_origin_stop = document.getElementById("origin-stop-dropdown").value;
     var index_destination_stop = document.getElementById("destination-stop-dropdown").value;
 
-    if (index_destination_stop != "none") {
+    if (route_name != "none" && index_direction != "none" && index_origin_stop != "none" && index_destination_stop != "none") {
         show_route(route_name, index_direction, index_origin_stop, index_destination_stop);
         predict_time(route_name, index_direction, index_origin_stop, index_destination_stop);
     } else {
