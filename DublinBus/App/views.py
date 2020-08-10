@@ -103,7 +103,7 @@ def predict_time(request, route_id, origin_stop_sequence, origin_stop_id, destin
     order_features = [wday, second, origin_stop_id]
     # print("order_feature:",order_features)
 
-    rfc = joblib.load('./models/predictOrder.joblib')
+    rfc = joblib.load('./models/OrderModels/OrderModel_%s.joblib' % route_id)
     order = int(rfc.predict([order_features])[0])
     # print("order:", order)
 
