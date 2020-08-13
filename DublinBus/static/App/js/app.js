@@ -56,11 +56,13 @@ function Stop(stop_id, stop_name, pos_latitude, pos_longitude)
     this.pos_longitude = pos_longitude;
 }
 
+// Init information
 function init() {
     init_date_and_time();
     init_routes();
 }
 
+// Init date
 function init_date() {
     var time = new Date();
     var day = ("0" + time.getDate()).slice(-2);
@@ -70,6 +72,7 @@ function init_date() {
     document.getElementById("predict-date-google").value = today;
 }
 
+// Init time
 function init_time() {
     var date = new Date();
     var hour = ("0" + date.getHours()).slice(-2);
@@ -79,6 +82,7 @@ function init_time() {
     document.getElementById("predict-time-google").value = time;
 }
 
+// Init date and time
 function init_date_and_time() {
     init_date();
     init_time();
@@ -180,6 +184,7 @@ function init_route_dropdown() {
     document.getElementById("route-dropdown").innerHTML = options_routes;
 }
 
+// Init direction dropdown
 function init_direction_dropdown() {
     var options_directions = "";
     var direction_list = new Array();
@@ -203,6 +208,7 @@ function init_direction_dropdown() {
     document.getElementById("direction-dropdown").innerHTML = options_directions;
 }
 
+// Init origin stop dropdown
 function init_origin_stop_dropdown() {
     var options_stops = "";
     var stop_name_list = new Array();
@@ -221,6 +227,7 @@ function init_origin_stop_dropdown() {
     document.getElementById("origin-stop-dropdown").innerHTML = options_stops;
 }
 
+// Init destination stop dropdown
 function init_destination_stop_dropdown() {
     var options_stops = "";
     var stop_name_list = new Array();
@@ -239,6 +246,7 @@ function init_destination_stop_dropdown() {
     document.getElementById("destination-stop-dropdown").innerHTML = options_stops;
 }
 
+// Init address
 var origin_address_box;
 var destination_address_box;
 
@@ -258,20 +266,24 @@ function init_address() {
     });
 }
 
+// Update destination stop
 function select_origin_stop() {
     init_destination_stop_dropdown();
 }
 
+// Init and update origin stop
 function select_direction() {
     init_origin_stop_dropdown();
     select_origin_stop();
 }
 
+// Init and update direction
 function select_route() {
     init_direction_dropdown();
     select_direction();
 }
 
+// Clear route on map
 var markerList = [];
 
 function clear_route() {
@@ -285,6 +297,7 @@ function clear_route() {
     }
 }
 
+// Show route on map
 function show_route(route_name, index_direction, index_origin_stop, index_destination_stop) {
     map.setZoom(11);
     clear_route();
@@ -304,6 +317,7 @@ function show_route(route_name, index_direction, index_origin_stop, index_destin
     }
 }
 
+// Predict time
 function predict_time(route_name, index_direction, index_origin_stop, index_destination_stop) {
     var origin_stop = stop_id_map.get(route_map.get(route_name)[index_direction][index_origin_stop]);
     var destination_stop = stop_id_map.get(route_map.get(route_name)[index_direction][index_destination_stop]);
@@ -329,6 +343,7 @@ function predict_time(route_name, index_direction, index_origin_stop, index_dest
     })
 }
 
+// Search by route
 function search_by_route() {
     var content = "<div class='title' style=\"font-size:20px\">Please wait for the prediction result.</div>"
     document.getElementById("search-by-route-content").innerHTML = content;
@@ -364,12 +379,14 @@ function search_by_address() {
     pre_draw_route();
 }
 
+// Get origin address
 function get_origin_address() {
   var from = document.getElementById('origin-address').value;
   //codeAddress(from);
   return from;
 }
 
+// Get destination address
 function get_destination_address() {
   var to = document.getElementById('destination-address').value;
   //codeAddress(to);
@@ -455,6 +472,7 @@ function pre_draw_route() {
     draw_route();
 }
 
+// Draw route on map
 function draw_route() {
     var request = {
         origin: new google.maps.LatLng(coord_origin_address.lat(), coord_origin_address.lng()),

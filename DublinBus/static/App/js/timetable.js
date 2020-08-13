@@ -156,6 +156,7 @@ function init_route_dropdown() {
     document.getElementById("route-dropdown").innerHTML = options_routes;
 }
 
+// Init direction dropdown
 function init_direction_dropdown() {
     var options_directions = "";
     var direction_list = new Array();
@@ -204,10 +205,12 @@ function init_stop_dropdown() {
     document.getElementById("stop-dropdown").innerHTML = options_stops;
 }
 
+// Update direction dropdown
 function select_route() {
     init_direction_dropdown();
 }
 
+// Clear route on map
 var markerList = [];
 
 function clear_route() {
@@ -221,6 +224,7 @@ function clear_route() {
     }
 }
 
+// Show route on map
 function show_route_map(route_name, index_direction, index_origin_stop, index_destination_stop) {
     map.setZoom(11);
     clear_route();
@@ -240,6 +244,7 @@ function show_route_map(route_name, index_direction, index_origin_stop, index_de
     }
 }
 
+// Show route list
 function show_route_list(route_name, index_direction, index_origin_stop, index_destination_stop) {
     var content = "<ul>";
     for (var index = index_origin_stop; index <= index_destination_stop; index++) {
@@ -250,6 +255,7 @@ function show_route_list(route_name, index_direction, index_origin_stop, index_d
     document.getElementById("search-by-route-content").innerHTML = content;
 }
 
+// Search by route
 function search_by_route() {
 
     var route_name = document.getElementById("route-dropdown").value;

@@ -48,10 +48,12 @@ google.charts.load('current', {
     'packages': ['corechart']
 });
 
+// Init information
 function init() {
     init_date_and_time();
 }
 
+// Init date
 function init_date() {
     var time = new Date();
     var day = ("0" + time.getDate()).slice(-2);
@@ -61,6 +63,7 @@ function init_date() {
     document.getElementById("date-to-airport").value = today;
 }
 
+// Init time
 function init_time() {
     var date = new Date();
     var hour = ("0" + date.getHours()).slice(-2);
@@ -70,11 +73,13 @@ function init_time() {
     document.getElementById("time-to-airport").value = time;
 }
 
+// Init date and time
 function init_date_and_time() {
     init_date();
     init_time();
 }
 
+// Init address
 var origin_address_box;
 var destination_address_box;
 
@@ -94,6 +99,7 @@ function init_address() {
     });
 }
 
+// Clear route on map
 var markerList = [];
 
 function clear_route() {
@@ -231,6 +237,7 @@ function pre_draw_route() {
     draw_route();
 }
 
+// Draw route on map
 function draw_route() {
     var request = {
         origin: new google.maps.LatLng(coord_origin_address.lat(), coord_origin_address.lng()),
