@@ -30,6 +30,22 @@ pip install -r requirements.txt
 ```
 
 ## Running the Application
+- Migrations
+```
+cd ./Research-Practicum/DublinBus
+python manage.py runserver
+manage.py makemigrations
+manage.py migrate
+```
+- Import static data
+```
+cd ./Research-Practicum/DublinBus
+python manage.py shell
+import load.py
+exit
+```
+
+
 - Start the Django backend
 ```
 cd ./Research-Practicum/DublinBus
