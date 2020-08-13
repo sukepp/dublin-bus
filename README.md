@@ -39,16 +39,16 @@ manage.py migrate
 ```
 - Import static data
 ```
-cd ./Research-Practicum/DublinBus
 python manage.py shell
 import load.py
 exit
 ```
-
-
+- Get weather forecast information
+```
+python forecast.py
+```
 - Start the Django backend
 ```
-cd ./Research-Practicum/DublinBus
 python manage.py runserver
 ```
 
