@@ -140,3 +140,7 @@ def test(request):
     result["stops"] = stops
 
     return JsonResponse(result)
+
+
+def test2(request):
+    return render(request, "App/test.html");
