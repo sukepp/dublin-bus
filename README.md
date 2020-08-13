@@ -30,9 +30,25 @@ pip install -r requirements.txt
 ```
 
 ## Running the Application
-- Start the Django backend
+- Migrations
 ```
 cd ./Research-Practicum/DublinBus
+python manage.py runserver
+manage.py makemigrations
+manage.py migrate
+```
+- Import static data
+```
+python manage.py shell
+import load.py
+exit
+```
+- Get weather forecast information
+```
+python forecast.py
+```
+- Start the Django backend
+```
 python manage.py runserver
 ```
 

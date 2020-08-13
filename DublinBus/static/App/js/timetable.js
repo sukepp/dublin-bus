@@ -229,7 +229,7 @@ function show_route_map(route_name, index_direction, index_origin_stop, index_de
     map.setZoom(11);
     clear_route();
 
-    for (var index = index_origin_stop; index <= index_destination_stop; index++) {
+    for (var index = Number(index_origin_stop); index <= Number(index_destination_stop); index++) {
         var stop = stop_id_map.get(route_map.get(route_name)[index_direction][index]);
         marker = new google.maps.Marker({
             position: {
