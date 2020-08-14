@@ -177,7 +177,7 @@ function predict_time(route_name, index_direction, index_origin_stop, index_dest
         var prediction_time = data.prediction_time;
         var content = document.getElementById("test_result").innerHTML;
         content += "<div style=\"font-size:16px\">" + route_name + " " + origin_stop.stop_name + " " + destination_stop.stop_name + " "
-            + Number(index_destination - index_origin) + " " + prediction_time + "</div>";
+            + Number(index_destination_stop - index_origin_stop) + " " + prediction_time + " Y</div>";
         document.getElementById("test_result").innerHTML = content;
     })
     .done(function () {
