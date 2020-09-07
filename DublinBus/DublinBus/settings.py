@@ -87,13 +87,13 @@ DATABASES = {
         
 
         # Account for vm server
-        'PASSWORD': 'WEaregroup14!',
+        #'PASSWORD': 'WEaregroup14!',
 
         # Account for Jiaqi Guo
         #'PASSWORD': 'abc963215',
 
         # Account for Peisong Han
-        #'PASSWORD': 'hanpeisong',
+        'PASSWORD': 'hanpeisong',
 
         'HOST': '127.0.0.1',
         'PORT': '3306'
